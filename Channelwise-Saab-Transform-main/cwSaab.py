@@ -69,6 +69,7 @@ class cwSaab():
         X = shrinkArg['func'](X, shrinkArg)
         S = list(X.shape)
         X = X.reshape(-1, S[-1])
+        print(f'In Saabfit:  X.shape = {X.shape}')
         saab = Saab(num_kernels=SaabArg['num_AC_kernels'], needBias=SaabArg['needBias'], bias=bias)
         saab.fit(X)
         return saab

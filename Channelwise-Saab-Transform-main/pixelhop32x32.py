@@ -114,13 +114,15 @@ if __name__ == "__main__":
     print(" > This is a test example: ")
     digits = datasets.load_digits()
     X = digits.images.reshape((len(digits.images), 8, 8, 1))
-    X = mnist_test_images
+    #X = mnist_test_images
     print(" input feature shape: %s"%str(X.shape))
 
     # set args
     SaabArgs = [{'num_AC_kernels':-1, 'needBias':False, 'cw': False},
+                {'num_AC_kernels':-1, 'needBias':True, 'cw':True},
                 {'num_AC_kernels':-1, 'needBias':True, 'cw':True}] 
     shrinkArgs = [{'func':Shrink, 'win':2, 'stride': 2}, 
+                {'func': Shrink, 'win':2, 'stride': 2},
                 {'func': Shrink, 'win':2, 'stride': 2}]
     concatArg = {'func':Concat}
 
@@ -130,12 +132,15 @@ if __name__ == "__main__":
     p2.fit(X)
     output1 = p2.transform(X)
     output2 = p2.transform_singleHop(X)
+    
+    with open('output.pkl', "wb") as file:
+        pickle.dump(output1, file)
 
-    '''Test for Save / Load'''
+    """ '''Test for Save / Load'''
     p2.save('./dummy')
     p2_new = Pixelhop(load=True).load('./dummy')
     output1_new = p2_new.transform(X)
-    output2_new = p2_new.transform_singleHop(X)
+    output2_new = p2_new.transform_singleHop(X) """
 
     print("------- DONE -------\n")
     
