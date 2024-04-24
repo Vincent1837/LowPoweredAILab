@@ -104,7 +104,8 @@ if __name__ == "__main__":
         
     X = data.copy()
     X = X.reshape(X.shape[0], -1)[0:100]
-    
+    print(f'X.shape: {X.shape}')
+    print(f'X = {X}')
     saab = Saab(num_kernels=-1, needBias=True, bias=0)
     saab.fit(X)
     
