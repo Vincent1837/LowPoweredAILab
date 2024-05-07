@@ -3,8 +3,20 @@ from feat_utils import feature_selection
 from tensorflow import keras
 import numpy as np
 
-(mnist_train_images, mnist_train_labels), (mnist_test_images, mnist_test_labelss) = keras.datasets.mnist.load_data()
+(mnist_train_images, mnist_train_labels), (mnist_test_images, mnist_test_labels) = keras.datasets.mnist.load_data()
 (cifar_train_images, cifar_train_labels), (cifar_test_images, cifar_test_labels) = keras.datasets.cifar10.load_data()
+
+def resize_batch(imgs):
+    from skimage import transform
+    # A function to resize a batch of MNIST images to (32, 32)
+    imgs = imgs.reshape((-1, 28, 28, 1))
+    resized_imgs = np.zeros((imgs.shape[0], 32, 32, 1))
+    for i in range(imgs.shape[0]):
+        resized_imgs[i, ..., 0] = transform.resize(imgs[i, ..., 0], (32, 32))
+    return resized_imgs
+
+mnist_train_images = resize_batch(mnist_train_images)
+mnist_test_images = resize_batch(mnist_test_images)
 
 if __name__ == "__main__":
     print("------- cwSaab -----\n")
@@ -36,14 +48,14 @@ if __name__ == "__main__":
     # read data
     import cv2
     print(" > This is a test example: ")
-    digits = datasets.load_digits()
-    #digits = mnist_test_images
-    X = digits.images.reshape((len(digits.images), 8, 8, 1))
+    #digits = datasets.load_digits()
+    #X = digits.images.reshape((len(digits.images), 8, 8, 1))
+    X = mnist_test_images
     print(" input feature shape: %s"%str(X.shape))
 
     # set args
     SaabArgs = [{'num_AC_kernels':-1, 'needBias':False, 'useDC':False, 'batch':None}, 
-                {'num_AC_kernels':-1, 'needBias':True, 'useDC':False, 'batch':None}]
+                {'num_AC_kernels':2, 'needBias':True, 'useDC':False, 'batch':None}]
     shrinkArgs = [{'func':Shrink, 'win':2}, 
                 {'func': Shrink, 'win':2},
                 {'func': Shrink, 'win':2}]
@@ -74,12 +86,11 @@ if __name__ == "__main__":
     assert (np.mean(np.abs(X-Y)) < 1), "invcwSaab error!"
     print(output[0].shape, output[1].shape) # (1797, 4, 4, 4) (1797, 2, 2, 4)
     print("------- DONE -------\n")
-    
     print("------- DFT  -------\n")
     
-    features = output[1].reshape(1797, -1)
-    labels = digits.target
+    features = output[1].reshape(len(X), -1)
+    labels = mnist_test_labels
     
-    selected, dft_loss = feature_selection(features, labels, FStype='DFT_entropy', thrs=1.0, B=16)
+    selected, dft_loss = feature_selection(features, labels, FStype='DFT_entropy', thrs=0.5, B=16)
 
     print(selected)
