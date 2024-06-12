@@ -2,6 +2,7 @@ from cwSaab import cwSaab
 from feat_utils import feature_selection
 from tensorflow import keras
 import numpy as np
+import xgboost as xgb
 
 (mnist_train_images, mnist_train_labels), (mnist_test_images, mnist_test_labels) = keras.datasets.mnist.load_data()
 (cifar_train_images, cifar_train_labels), (cifar_test_images, cifar_test_labels) = keras.datasets.cifar10.load_data()
@@ -84,7 +85,7 @@ if __name__ == "__main__":
     Y = cwsaab.inverse_transform(output, inv_concatArg=inv_concatArg, inv_shrinkArgs=inv_shrinkArgs)
     Y = np.round(Y)
     assert (np.mean(np.abs(X-Y)) < 1), "invcwSaab error!"
-    print(output[0].shape, output[1].shape) # (1797, 4, 4, 4) (1797, 2, 2, 4)
+    #print(output[0].shape, output[1].shape) # (1797, 4, 4, 4) (1797, 2, 2, 4)
     print("------- DONE -------\n")
     print("------- DFT  -------\n")
     
@@ -94,3 +95,35 @@ if __name__ == "__main__":
     selected, dft_loss = feature_selection(features, labels, FStype='DFT_entropy', thrs=0.5, B=16)
 
     print(selected)
+    
+    # XGBoost
+    
+    X_train = [X[i].reshape(len(selected), -1) for i in selected]
+    y_train = labels[selected]
+    X_test = mnist_test_images[selected]
+    y_test = mnist_test_labels[selected]
+    print(X_train.__len__())
+    print(X_train[0].__len__())
+    print(X_train[0])
+    
+    """ dtrain = xgb.DMatrix(X_train, label=y_train)
+    dtest = xgb.DMatrix(X_test, label=y_test)
+    
+    # Create and train the XGBClassifier
+    model = xgb.XGBClassifier(
+        booster='gbtree',
+        objective='multi:softprob',  # multi-class classification
+        num_class=10,  # number of classes
+        eta=0.3,  # learning rate
+        max_depth=6,  # maximum depth of the trees
+        eval_metric='mlogloss',  # evaluation metric
+        use_label_encoder=False  # to suppress a warning
+    )
+    model.fit(dtrain)
+    # Make predictions
+    predictions = model.predict(dtest)
+
+    # Evaluate the model
+    from sklearn.metrics import accuracy_score
+    accuracy = accuracy_score(y_test, predictions)
+    print(f"MNIST Accuracy: {accuracy * 100:.2f}%") """
