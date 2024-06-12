@@ -10,10 +10,6 @@ from skimage import transform
 # padding mnist images from 28x28 to 32x32
 def resize_batch(imgs):
     # A function to resize a batch of MNIST images to (32, 32)
-    # Args:
-    #   imgs: a numpy array of size [batch_size, 28 X 28].
-    # Returns:
-    #   a numpy array of size [batch_size, 32, 32].
     imgs = imgs.reshape((-1, 28, 28, 1))
     resized_imgs = np.zeros((imgs.shape[0], 32, 32, 1))
     for i in range(imgs.shape[0]):

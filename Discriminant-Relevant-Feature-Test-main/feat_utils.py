@@ -10,11 +10,25 @@ class Disc_Feature_Test():
         self.loss_list = []
 
     def binning(self,x,y):
+        '''
+        Partitioning training samples on one dimensoin
+        Returns the best loss among all bins
+        
+        Parameters
+        -----------------
+        x: Shape(N, 1). (one dimension of features)
+        y: Shape(N, 1). (lables of features)
+        
+        Returns
+        -----------------
+        best_loss: the minimum loss of all the candidates.
+        
+        '''
         if np.max(x) ==  np.min(x):
             return 1 
 
         # B bins (B-1) candicates of partioning point
-        candidates = np.arange(np.min(x),np.max(x),(np.max(x)-np.min(x))/(self.B_))
+        candidates = np.arange(np.min(x), np.max(x), (np.max(x)-np.min(x)) / (self.B_))
         candidates = candidates[1:]
         candidates = np.unique(candidates)
 
@@ -75,7 +89,7 @@ def feature_selection(tr_X, tr_y, FStype='DFT_entropy', thrs=1.0, B=16):
     NUM_CLS = np.unique(tr_y).size
     if FStype == 'DFT_entropy': # lower the better # more loss options will be added
         dft = Disc_Feature_Test(num_class=NUM_CLS, num_Candidate=B, loss='entropy')
-        feat_score = dft.get_all_loss(tr_X, tr_y)
+        feat_score = dft.get_all_loss(tr_X, tr_y) # scores of all the features
         feat_sorted_idx = np.argsort(feat_score)
 
     selected_idx = feat_sorted_idx[:int(thrs*feat_score.size)]
