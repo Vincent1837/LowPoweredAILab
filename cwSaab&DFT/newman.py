@@ -46,21 +46,16 @@ if __name__ == "__main__":
     print("Input feature shape: %s" % str(X.shape))
 
     # Set arguments for cwSaab
-    SaabArgs = [{'num_AC_kernels': -1, 'needBias': False, 'useDC': False, 'batch': None}, 
-                {'num_AC_kernels': 2, 'needBias': True, 'useDC': False, 'batch': None}]
-    shrinkArgs = [{'func': Shrink, 'win': 2}, 
-                  {'func': Shrink, 'win': 2},
-                  {'func': Shrink, 'win': 2}]
-    inv_shrinkArgs = [{'func': invShrink, 'win': 2}, 
-                      {'func': invShrink, 'win': 2},
-                      {'func': invShrink, 'win': 2}]
+    SaabArgs = [{'num_AC_kernels': -1, 'needBias': True, 'useDC': False, 'batch': None}]
+    shrinkArgs = [{'func': Shrink, 'win': 2}]
+    inv_shrinkArgs = [{'func': invShrink, 'win': 2}]
     concatArg = {'func': Concat}
     inv_concatArg = {'func': Concat}
     kernelRetainArg = {'Layer0': -1, 'Layer1': -1, 'Layer2': -1}
 
     # Initialize and fit cwSaab
-    print("Testing cwSaab with depth=2")
-    cwsaab = cwSaab(depth=2, energyTH=0.5, SaabArgs=SaabArgs, shrinkArgs=shrinkArgs, concatArg=concatArg, splitMode=0, cwHop1=True)
+    print("Testing cwSaab with depth=1")
+    cwsaab = cwSaab(depth=1, energyTH=0.5, SaabArgs=SaabArgs, shrinkArgs=shrinkArgs, concatArg=concatArg, splitMode=0, cwHop1=True)
     output = cwsaab.fit(X)
     output = cwsaab.transform(X)
 
@@ -70,9 +65,9 @@ if __name__ == "__main__":
     assert (np.mean(np.abs(X - Y)) < 1), "invcwSaab error!"
 
     # Feature selection
-    features = output[1].reshape(len(X), -1)
+    features = output[0].reshape(len(X), -1)
     labels = mnist_train_labels
-    selected, dft_loss = feature_selection(features, labels, FStype='DFT_entropy', thrs=0.8, B=16)
+    selected, dft_loss = feature_selection(features, labels, FStype='DFT_entropy', thrs=0.7, B=16)
     print("Selected features:", selected)
 
     # Prepare data for XGBoost
@@ -86,6 +81,7 @@ if __name__ == "__main__":
     model = XGBClassifier(
         booster='gbtree',
         objective='multi:softprob',  # multi-class classification
+        n_estimators=100, # number of estimators
         num_class=10,  # number of classes
         eta=0.3,  # learning rate
         max_depth=6,  # maximum depth of the trees
