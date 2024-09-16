@@ -65,7 +65,7 @@ class myPCA():
 
 if __name__ == "__main__":
     import cv2
-    X = cv2.imread('/Users/alex/Desktop/proj/compression/data/Kodak/kodim03.png')
+    X = cv2.imread('./slides/img/DeepFakeHop++/img2.png')
     p = myPCA(n_components=2, isInteger=1)
     p.fit(X)
     print(p.Kernels)

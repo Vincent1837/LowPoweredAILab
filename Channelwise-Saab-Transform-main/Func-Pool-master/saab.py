@@ -82,6 +82,7 @@ if __name__ == "__main__":
     print(" -----> num_kernels=-1, needBias=False, useDC=True")
     X = data.copy()
     X = X.reshape(X.shape[0], -1)[0:100]
+    print(X.shape)
     saab = Saab(num_kernels=-1, useDC=True, needBias=False)
     saab.fit(X, whichPCA='numpy')
     Xt = saab.transform(X)

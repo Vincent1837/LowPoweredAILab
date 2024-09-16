@@ -23,7 +23,7 @@ class myPCA():
         self.Energy_ratio = self.PCA.explained_variance_ratio_
         self.Energy       = self.PCA.explained_variance_
         
-    def fit(self, X):
+    def fit(self, X, whichPCA):
         X = X.reshape(  -1, X.shape[-1]  )
         if self.n_components == -1:
             self.n_components = X.shape[-1]

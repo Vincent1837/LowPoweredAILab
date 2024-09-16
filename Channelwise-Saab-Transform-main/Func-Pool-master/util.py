@@ -4,7 +4,7 @@
 #
 import numpy as np
 from skimage.util import view_as_windows
-from LANCZOS import LANCZOS
+# from LANCZOS import LANCZOS
 
 def Shrink(X, win):
     if type(win) == dict:
@@ -31,6 +31,6 @@ def invShrink(X, win):
         X = X.reshape(S[0], win*S[1], win*S[2], -1)
     return X
 
-def DownSample(X, r):
+""" def DownSample(X, r):
     a, b =  LANCZOS.split(X, r)   
-    return a
+    return a """
