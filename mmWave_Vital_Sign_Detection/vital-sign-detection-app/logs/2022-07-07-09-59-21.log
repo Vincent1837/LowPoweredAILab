@@ -1,0 +1,78 @@
+2022-07-07 09:59:21
+============ FMCW RADAR SYSTEM CONFIGURATION ============
+    Radar Parameters:
+      Light speed (m/s):                    299792458.0
+  ----------------------------------------------------
+    Desired Radar Metric:
+      Range resolution (m):                 0.05
+      Maximum range (m):                    3.0
+      Maximum speed (m/s):                  1.5
+      Speed resolution (m/s):               0.1
+  ----------------------------------------------------
+    Radar Configuration:
+      Number of beams of DBF:               1
+      Radar FOV (degree):                   120
+      Sample rate (Hz):                     1000000
+      RX Antenna Mask:                      1
+      TX Antenna Mask:                      1
+      IF Gain (dB):                         33
+      TX Power Level:                       31
+      Frame Period (s):                     0.1
+      Frame Rate (frames/s):                10.0
+      Radar Frequency Band (Hz):            60750000000
+      Wave Length (m):                      0.004934855275720165
+  ----------------------------------------------------
+    Antenna Configuration:
+      Number of transmit antenna:           1
+      Number of receive antenna:            1
+  ----------------------------------------------------
+    Get Radar Configuration Parameters:
+      Ramp start frequency (Hz):            59214588000
+      Ramp end frequency (Hz):              62285412000
+      Number of Chirps per Frame:           32
+      Number of samples per Chirp:          128
+      Chirp repetition time (s):            0.0008214000263251364
+      MIMO Mode:                            0
+  ----------------------------------------------------
+    FFT Parameters:
+      Number of range fft:                  128
+      Number of Doppler fft:                32
+      Number of vibration fft:              512
+  ----------------------------------------------------
+    DSP Parameters:
+      Smoothing factor:                     0.05
+      Low cut-off freq. for heart rate (Hz):0.8
+      High cut-off freq. for heart rate(Hz):2.0
+      Low cut-off freq. for breath rate(Hz):0.1
+      High cutoff freq. for breath rate(Hz):0.5
+      Min. attenuation in the stopband(dB): 40.0
+  ----------------------------------------------------
+    Directories and Files:
+      Log directory:                        logs/
+  ----------------------------------------------------
+    Plot Options:
+      Range Azimuth Plot:                   False
+      Range Plot:                           False
+      Range Plot with Static clutter removal:False
+      Range-Doppler Plot:                   False
+      Make Movie:                           False
+      uDoppler Spectrogram:                 False
+      Doppler Shift in Hz:                  False
+      Log Gabor filter:                     False
+      plot Heart rate filter:               False
+      plot Breath rate filter:              False
+      plotRangeSlow:                        False
+      plotRangeUnwrap:                      False
+      plotUnwrap:                           False
+      plot Phase De-noised:                 False
+      plotWaveform:                         False
+      plotVibrateFFT:                       False
+      plotDBSCAN:                           False
+=============== CONFIGURATION SUMMARY END ===============
+=================== REAL FMCW RADAR SYSTEM PARAMETERS ===================
+    Real Radar Parameters:
+      Range resolution (m):                 0.04881303161626977
+      Maximum distance (m):                 3.1240340234412654
+      Speed resolution (m/s):               0.09387279183334979
+      Maximum speed (m/s):                  1.5019646693335966
+======================= SHOW PARAMETERS END =======================
