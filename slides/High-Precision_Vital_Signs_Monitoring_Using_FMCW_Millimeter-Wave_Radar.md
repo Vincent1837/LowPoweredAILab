@@ -112,6 +112,95 @@ $N_{\text{samples}}$ means the number of sampling points of each chirp; and $N_{
 
 ---
 
+# DC Offset Compenstation
+
+### **Definition**
+- DC offset is an unwanted constant or low-frequency component in a signal that shifts it away from its baseline (zero level). 
+- This offset occurs due to hardware imperfections such as ADC or amplifier imbalance.
+
+### **Purpose**
+- Remove the DC component to center the signal around zero.
+- Improve analysis of dynamic signal variations caused by respiration and heartbeat.
+
+---
+
+### **Process**
+1. **Calculate the DC Component**:
+   $$
+   \text{DC}_{\text{value}} = \frac{1}{N} \sum_{n=1}^N x[n]
+   $$
+2. **Subtract the DC Component**:
+   $$
+   x_{\text{adjusted}}[n] = x[n] - \text{DC}_{\text{value}}
+   $$
+3. **Result**:
+   - Signal is centered around zero, eliminating static bias.
+
+---
+
+![](img/FMCW_DSP/img3.png)
+
+---
+
+## **DACM (Differentiate and Cross Multiply)**
+### **Definition**
+- A method to extract dynamic phase changes from radar signals by focusing on short-term variations and removing static noise.
+
+### **Purpose**
+- Isolate dynamic phase signals caused by physiological movements (e.g., breathing, heartbeat).
+- Remove static phase noise or low-frequency interference.
+
+---
+
+### **Steps**
+1. **Phase Extraction**:
+   - Calculate the instantaneous phase from I (in-phase) and Q (quadrature) components:
+    $\phi(t) = \tan^{-1} \left(\frac{Q(t)}{I(t)}\right)$
+1. **Differential Phase Calculation**:
+   - Compute the change in phase over time:
+    $\Delta \phi(t) = \phi(t) - \phi(t-1)$
+2. **Accumulation**:
+   - Reconstruct the dynamic phase signal by accumulating differential values:
+    $\phi_{\text{DACM}}(t) = \sum_{k=1}^{t} \Delta \phi(k)$
+1. **Filtering**:
+   - Apply high-pass filtering to remove residual low-frequency noise.
+
+---
+
+1. $$\begin{equation}\frac{d}{dt} \phi(t) = \frac{d}{dt} \left[ \arctan \frac{Q(t)}{I(t)} \right] = \frac{I(t) Q'(t) - Q(t) I'(t)}{I(t)^2 + Q(t)^2}\end{equation}$$
+
+2. $$\begin{equation}\phi(n) = \sum_{k=2}^{n} \frac{I(k) \left[ Q(k) - Q(k-1) \right] - Q(k) \left[ I(k) - I(k-1) \right]}{I(k)^2 + Q(k)^2}\end{equation}$$
+
+---
+
+We transform the extracted phase into **the waveform of chest vibration amplitude varying with slow time** and obtain **its spectrum information** through FFT.
+![](img/FMCW_DSP/img4.png)
+We found that the heartbeat frequency is covered in the spectrum in ***Figure 4b*** because the chest fluctuation caused by the heartbeat is very weak relative to breath
+
+---
+
+The first-order phase difference operation is adopted to enhance the heartbeat signal. ***Figure 5*** shows the time domain waveform and frequency domain spectrum of the differential signal, where the spectral amplitude in the heart rate range is increased.
+![](img/FMCW_DSP/img5.png)
+
+---
+
+## **Examples**
+### **DC Offset Compensation**:
+- Input Signal: $x(t) = 3 + \sin(t)$
+- After Compensation: $x(t) = \sin(t)$
+
+### **DACM**:
+- Input Phase: $\phi(t) = \text{static component} + \text{dynamic signal}$
+- After DACM: Only dynamic signal remains (e.g., breathing signal at 0.2 Hz, heartbeat at 1 Hz).
+
+---
+
+## **Key Applications**
+- DC Offset Compensation: Preprocessing radar signals for accurate phase analysis.
+- DACM: Extracting precise dynamic phase components for physiological monitoring.
+
+---
+
 # Experiments and Results
 
 ---
