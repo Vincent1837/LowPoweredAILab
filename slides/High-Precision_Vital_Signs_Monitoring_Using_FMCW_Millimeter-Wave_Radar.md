@@ -184,20 +184,68 @@ The first-order phase difference operation is adopted to enhance the heartbeat s
 
 ---
 
-## **Examples**
-### **DC Offset Compensation**:
-- Input Signal: $x(t) = 3 + \sin(t)$
-- After Compensation: $x(t) = \sin(t)$
-
-### **DACM**:
-- Input Phase: $\phi(t) = \text{static component} + \text{dynamic signal}$
-- After DACM: Only dynamic signal remains (e.g., breathing signal at 0.2 Hz, heartbeat at 1 Hz).
+# Iterative VMD Wavelet-Interval-Thresholding 
+ 
+1. Combines **Variational Mode Decomposition (VMD)** with **Wavelet Interval Thresholding**.  
+2. **Goal**: Extract meaningful signals (e.g., heartbeat or breathing signals) from complex data and impulse noise.  
+3. Uses an **iterative framework** to improve signal purity.  
 
 ---
 
-## **Key Applications**
-- DC Offset Compensation: Preprocessing radar signals for accurate phase analysis.
-- DACM: Extracting precise dynamic phase components for physiological monitoring.
+## Method Overview  
+
+1. **Signal Decomposition (VMD)**  
+   - Decomposes the raw signal into multiple modes, corresponding to a different frequency band(**IMFs**).  
+2. **Wavelet Thresholding**  
+   - Performs wavelet decomposition to obtain approximation and detail coefficients.  
+   - Applies adaptive thresholding to suppress noise coefficients.  
+3. **Signal Reconstruction**  
+   - Combines wavelet coefficients to reconstruct the denoised modes.  
+4. **Iterative Processing**  
+   - Repeats decomposition and thresholding for further noise suppression.  
+
+---
+
+## VMD Decomposition
+
+- A signal processing technique that decomposes a complex signal into Intrinsic Mode Functions (IMFs), each within a specific frequency band.
+
+### example
+1. Original Signal: Includes heartbeat, breathing, and noise components.  
+2. Modes Extracted by VMD:  
+   - **Mode 1**: High-frequency noise.  
+   - **Mode 2**: Breathing signal.  
+   - **Mode 3**: Heartbeat signal.  
+
+---
+
+## Wavelet Thresholding
+
+1. Decomposes each mode into wavelet coefficients.  
+   - Approximation coefficients: Low-frequency components.  
+   - Detail coefficients: High-frequency components (often noise).  
+2. Applies adaptive thresholding:  
+   - Keeps significant coefficients (signal).  
+   - Suppresses coefficients below the threshold (noise).  
+
+---
+
+## Iterative Framework
+
+1. Reconstruct the denoised signal after wavelet thresholding.  
+2. Feed the reconstructed signal back into the VMD step.  
+3. Repeat the process until noise is minimized and signal clarity improves.  
+
+---
+
+![](img/FMCW_DSP/img8.png)
+
+---
+
+# Results
+
+![](img/FMCW_DSP/img6.png)
+![](img/FMCW_DSP/img7.png)
 
 ---
 
